@@ -36,4 +36,4 @@ python main.py
 
 示例设备图片：
 
-![device](doc/device.jpg)
+<img src="doc/device.jpg" alt="Device" width="300" />
