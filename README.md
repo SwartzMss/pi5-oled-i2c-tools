@@ -34,4 +34,6 @@ sudo apt-get install fonts-wqy-zenhei
 python main.py
 ```
 
-示例设备图片见 `device.jpg`。
+示例设备图片：
+
+![device](doc/device.jpg)
