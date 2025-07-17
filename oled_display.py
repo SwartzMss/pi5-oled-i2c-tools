@@ -46,5 +46,6 @@ def show_environment(
         font = ImageFont.load_default()
     with canvas(device) as draw:
         draw.text((0, 0), f"温度：{temperature:.1f}℃", font=font, fill=255)
-        draw.text((0, 16), f"湿度：{humidity:.1f}%", font=font, fill=255)
+        line_height = font.getsize("hg")[1]
+        draw.text((0, line_height), f"湿度：{humidity:.1f}%", font=font, fill=255)
     time.sleep(duration)
