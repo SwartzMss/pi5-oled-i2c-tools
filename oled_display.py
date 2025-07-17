@@ -9,13 +9,16 @@ def init_display(
     i2c_address: int = 0x3C,
     *,
     driver: str = "ssd1306",
+    width: int = 128,
+    height: int = 64,
+    rotate: int = 0,
 ):
     """Initialize and return the OLED device."""
     serial = i2c(port=i2c_port, address=i2c_address)
     if driver == "sh1106":
-        device = sh1106(serial)
+        device = sh1106(serial, width=width, height=height, rotate=rotate)
     else:
-        device = ssd1306(serial)
+        device = ssd1306(serial, width=width, height=height, rotate=rotate)
     return device
 
 
