@@ -14,6 +14,12 @@ pip install luma.oled Pillow
 sudo apt-get install fonts-wqy-zenhei
 ```
 
+确认 I²C 已启用
+
+```bash
+sudo raspi-config
+```
+
 ## 接线说明
 
 | OLED 引脚 | Raspberry Pi5 引脚 |
