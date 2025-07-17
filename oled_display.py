@@ -8,7 +8,7 @@ def init_display(
     i2c_port: int = 1,
     i2c_address: int = 0x3C,
     *,
-    driver: str = "ssd1306",
+    driver: str = "sh1106",
     width: int = 128,
     height: int = 64,
     rotate: int = 0,
