@@ -1,13 +1,21 @@
 import time
 from luma.core.interface.serial import i2c
-from luma.oled.device import ssd1306
+from luma.oled.device import ssd1306, sh1106
 from luma.core.render import canvas
 from PIL import ImageFont
 
-def init_display(i2c_port: int = 1, i2c_address: int = 0x3C):
+def init_display(
+    i2c_port: int = 1,
+    i2c_address: int = 0x3C,
+    *,
+    driver: str = "ssd1306",
+):
     """Initialize and return the OLED device."""
     serial = i2c(port=i2c_port, address=i2c_address)
-    device = ssd1306(serial)
+    if driver == "sh1106":
+        device = sh1106(serial)
+    else:
+        device = ssd1306(serial)
     return device
 
 
