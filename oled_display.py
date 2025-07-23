@@ -71,3 +71,60 @@ def show_environment(
         draw.text((0, line_h), f"湿度：{humidity:.1f}%", font=font, fill=255)
 
     time.sleep(duration)
+
+
+def show_time(
+    device,
+    *,
+    duration: float = 2.0,
+    font_path: str = "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
+    font_size: int = 12,
+):
+    """Display the current time in HH:MM:SS format."""
+    try:
+        font = ImageFont.truetype(font_path, font_size)
+    except OSError:
+        font = ImageFont.load_default()
+
+    message = time.strftime("%H:%M:%S")
+
+    with canvas(device) as draw:
+        draw.text((0, 0), message, font=font, fill=255)
+
+    time.sleep(duration)
+
+
+def show_smiley(
+    device,
+    *,
+    blink_times: int = 3,
+    open_time: float = 0.8,
+    close_time: float = 0.2,
+):
+    """Display a smiley face whose eyes blink."""
+
+    def _draw(eyes_open: bool) -> None:
+        with canvas(device) as draw:
+            # Face outline
+            draw.ellipse((32, 0, 96, 64), outline=255, fill=0)
+
+            if eyes_open:
+                # Open eyes as two filled circles
+                draw.ellipse((50, 20, 58, 28), outline=255, fill=255)
+                draw.ellipse((70, 20, 78, 28), outline=255, fill=255)
+            else:
+                # Closed eyes as two lines
+                draw.line((50, 24, 58, 24), fill=255, width=2)
+                draw.line((70, 24, 78, 24), fill=255, width=2)
+
+            # Smile arc
+            draw.arc((50, 34, 78, 56), 20, 160, fill=255)
+
+    for _ in range(blink_times):
+        _draw(True)
+        time.sleep(open_time)
+        _draw(False)
+        time.sleep(close_time)
+
+    _draw(True)
+    time.sleep(open_time)

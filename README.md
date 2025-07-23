@@ -75,12 +75,14 @@ device = init_display(i2c_port=10, i2c_address=0x3C, driver="sh1106")
 
 ## 示例
 
-- `main.py`：显示默认的温度和湿度信息（例如 25°C，40%）。 屏幕上会以中文显示温度和湿度。
+- `main.py`：默认显示温度和湿度信息（例如 25°C，40%）。传入 `--time` 参数显示当前 24 小时时分秒，传入 `--smile` 则显示会眨眼的笑脸。
 
 运行示例：
 
 ```bash
-python main.py
+python main.py         # 显示温湿度
+python main.py --time  # 显示当前时间
+python main.py --smile # 显示笑脸
 ```
 
 示例设备图片：
