@@ -19,6 +19,14 @@ def _line_height(font: ImageFont.FreeTypeFont) -> int:
     return ascent + descent                  # 行高≈上升+下降
 
 
+def _text_size(font: ImageFont.FreeTypeFont, text: str) -> Tuple[int, int]:
+    """Return text width and height, compatible with different Pillow versions."""
+    if hasattr(font, "getbbox"):
+        left, top, right, bottom = font.getbbox(text)
+        return right - left, bottom - top
+    return font.getsize(text)
+
+
 # ---------- OLED 初始化 ---------- #
 def init_display(
     i2c_port: int = 1,
@@ -79,17 +87,34 @@ def show_time(
     duration: float = 2.0,
     font_path: str = "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
     font_size: int = 12,
+    margin: int = 2,
 ):
     """Display the current time in HH:MM:SS format."""
-    try:
-        font = ImageFont.truetype(font_path, font_size)
-    except OSError:
-        font = ImageFont.load_default()
-
     message = time.strftime("%H:%M:%S")
 
+    try:
+        # Find the largest font size that fits within the screen minus margin
+        max_width = device.width - margin * 2
+        max_height = device.height - margin * 2
+        best_font = ImageFont.truetype(font_path, font_size)
+        for size in range(max_height, 0, -1):
+            try:
+                font = ImageFont.truetype(font_path, size)
+            except OSError:
+                break
+            w, h = _text_size(font, message)
+            if w <= max_width and h <= max_height:
+                best_font = font
+                break
+    except OSError:
+        best_font = ImageFont.load_default()
+
+    w, h = _text_size(best_font, message)
+    x = (device.width - w) // 2
+    y = (device.height - h) // 2
+
     with canvas(device) as draw:
-        draw.text((0, 0), message, font=font, fill=255)
+        draw.text((x, y), message, font=best_font, fill=255)
 
     time.sleep(duration)
 
